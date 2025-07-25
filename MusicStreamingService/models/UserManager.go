@@ -7,6 +7,20 @@ type UserManager struct {
 	mu    sync.RWMutex
 }
 
+var (
+	userManagerInstance *UserManager
+	userManagerOnce     sync.Once
+)
+
+func GetUserManager() *UserManager {
+	userManagerOnce.Do(func() {
+		userManagerInstance = &UserManager{
+			users: make(map[string]*User),
+		}
+	})
+	return userManagerInstance
+}
+
 func (um *UserManager) RegisterUser(user *User) {
 	um.mu.Lock()
 	defer um.mu.Unlock()
