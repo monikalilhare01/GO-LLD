@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -22,5 +23,16 @@ func NewElevator(id, capacity int) *Elevator {
 		currentDirection: int(DirectionUp),
 		requests:         make(chan *Request, capacity),
 		stopChan:         make(chan struct{}),
+	}
+}
+
+func (e *Elevator) AddRequest(r *Request) bool {
+	select {
+	case e.requests <- <-e.requests:
+		fmt.Printf("Lift : %d, From : %d ,TO:%d", e.id, r.sourceFloor, r.destinationFloor)
+		return true
+
+	default:
+		return false
 	}
 }
