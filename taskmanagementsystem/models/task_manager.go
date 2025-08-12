@@ -1,6 +1,9 @@
 package models
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 type TaskManger struct {
 	task     map[string]*Task
@@ -55,6 +58,57 @@ func (tm *TaskManger) DeleteTask(taskId string) {
 		delete(tm.task, taskId)
 		tm.unassignTaskFromUser(task.GetAssignedUser(), task)
 	}
+}
+
+func (tm *TaskManger) SearchTask(keyword string) []*Task {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+
+	var MatchingTask []*Task
+	for _, task := range tm.task {
+		if contains(task.GetDescription(), keyword) || contains(task.GetTitle(), keyword) {
+			MatchingTask = append(MatchingTask, task)
+		}
+	}
+	return MatchingTask
+}
+
+func (tm *TaskManger) FilterTask(status TaskStatus, startDate, endDate time.Time, priority int) []*Task {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+
+	var filteredTask []*Task
+
+	for _, task := range tm.task {
+		if task.GetStatu() == status &&
+			task.GetDueDate().After(startDate) &&
+			task.GetDueDate().Before(endDate) &&
+			task.GetPriority() == task.priority {
+			filteredTask = append(filteredTask, task)
+		}
+	}
+
+	return filteredTask
+}
+
+func (tm *TaskManger) MarkTaskAsCompleted(taskId string) {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+
+	if task, exists := tm.task[taskId]; exists {
+		task.SetStatus(DONE)
+	}
+}
+
+func (tm *TaskManger) GetTaskHistory(user *User) []*Task {
+	tm.mu.Lock()
+	defer tm.mu.Unlock()
+
+	return tm.userTask[user.GetID()]
+}
+
+func contains(text, substr string) bool {
+	return len(text) >= len(substr) && text[:len(substr)] == substr
 }
 
 func (tm *TaskManger) unassignTaskFromUser(user *User, task *Task) {
