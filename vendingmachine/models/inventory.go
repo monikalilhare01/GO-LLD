@@ -1,0 +1,18 @@
+package models
+
+type Inventory struct {
+	products map[*Product]int
+}
+
+func NewInventory() *Inventory {
+	return &Inventory{products: make(map[*Product]int)}
+}
+
+func (inv *Inventory) AddProduct(product *Product, quantity int) {
+	inv.products[product] = quantity
+}
+
+func (inv *Inventory) IsAvailable(product *Product) bool {
+	qty, exist := inv.products[product]
+	return exist && qty > 0
+}
