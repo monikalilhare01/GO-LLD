@@ -36,3 +36,10 @@ func (e *Elevator) AddRequest(r *Request) bool {
 		return false
 	}
 }
+
+func (e *Elevator) getCurrentFloor() int {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.currentFloor
+
+}
