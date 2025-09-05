@@ -2,27 +2,20 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"survey-backend/config"
 	"survey-backend/models"
-
-	"gorm.io/gorm"
 )
+
+type CreateSurveyResponse struct {
+	SurveyID int    `json:"survey_id"`
+	Message  string `json:"message"`
+}
 
 func CreateSurvey(w http.ResponseWriter, r *http.Request) {
 	var survey models.Survey
 	if err := json.NewDecoder(r.Body).Decode(&survey); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	err := config.DB.Table("surveys").Where("id = ?", survey.ID).First(&survey).Error
-	if err == nil {
-		http.Error(w, "Survey already exists", http.StatusOK)
-		return
-	} else if err.Error() != "record not found" && !errors.Is(err, gorm.ErrRecordNotFound) {
-		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
 
@@ -43,8 +36,16 @@ func CreateSurvey(w http.ResponseWriter, r *http.Request) {
 		config.DB.Create(&q)
 	}
 
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"survey_id": survey.ID,
-		"message":   "Survey created successfully",
+	json.NewEncoder(w).Encode(CreateSurveyResponse{
+		SurveyID: survey.ID,
+		Message:  "Survey created successfully",
 	})
+}
+
+func GeSurvey(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func GetSurveyByID(w http.ResponseWriter, r *http.Request) {
+
 }
