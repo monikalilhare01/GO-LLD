@@ -2,15 +2,27 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"survey-backend/config"
 	"survey-backend/models"
+
+	"gorm.io/gorm"
 )
 
 func CreateSurvey(w http.ResponseWriter, r *http.Request) {
 	var survey models.Survey
 	if err := json.NewDecoder(r.Body).Decode(&survey); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err := config.DB.Table("surveys").Where("id = ?", survey.ID).First(&survey).Error
+	if err == nil {
+		http.Error(w, "Survey already exists", http.StatusOK)
+		return
+	} else if err.Error() != "record not found" && !errors.Is(err, gorm.ErrRecordNotFound) {
+		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
 

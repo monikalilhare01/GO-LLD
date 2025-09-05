@@ -13,13 +13,12 @@ import (
 func main() {
 	config.InitDB()
 	r := mux.NewRouter()
-	routes.RegisterSurveyRoutes(r)
 
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Server is up and running"))
 	})
-
 	log.Println("Server started at :8080")
+	routes.RegisterSurveyRoutes(r)
 	http.ListenAndServe(":8080", r)
 }
