@@ -33,6 +33,6 @@ func main() {
 	go trafficController.StartTrafficControl()
 
 	// Simulate an emergency after some time
-	time.Sleep(10 * time.Second)
+	time.Sleep(20 * time.Second)
 	trafficController.HandleEmergency("road1")
 }
