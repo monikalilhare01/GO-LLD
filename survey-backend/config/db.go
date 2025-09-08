@@ -24,7 +24,7 @@ func Connect() (*gorm.DB, error) {
 	params := "parseTime=true&charset=utf8mb4&loc=Local"
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s", user, pass, host, port, name, params)
-	fmt.Println("🔗 Connecting to DB with DSN:", dsn)
+	fmt.Println("Connecting to DB with DSN:", dsn)
 
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -42,6 +42,6 @@ func Connect() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to run migrations: %w", err)
 	}
 
-	log.Println("✅ Database connected and migrated successfully")
+	log.Println("Database connected and migrated successfully")
 	return DB, nil
 }
