@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Response struct {
-	ID             int              `json:"id"`
+	ID             int              `json:"id" gorm:"primaryKey;autoIncrement"`
 	SurveyID       int              `json:"surver_id"`
 	QuestionID     int              `json:"question_id"`
 	UserID         int              `json:"user_id"`

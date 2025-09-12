@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Survey struct {
-	ID                int         `json:"id"`
+	ID                int         `json:"id" gorm:"primaryKey;autoIncrement"`
 	SurveyName        string      `json:"survey_name"`
 	SurveyDescription string      `json:"survey_description"`
 	Questions         []Questions `json:"questions" gorm:"foreignKey:SurveyID"`
