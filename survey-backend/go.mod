@@ -1,4 +1,4 @@
-module survey-backend
+module github.com/monikalilhare01/survey-backend
 
 go 1.24
 
