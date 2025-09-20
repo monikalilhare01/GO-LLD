@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"survey-backend/handlers"
+	"github.com/monikalilhare01/survey-backend/handlers"
 
 	"github.com/gorilla/mux"
 )
@@ -9,7 +9,7 @@ import (
 func RegisterSurveyRoutes(r *mux.Router) {
 	r.HandleFunc("/surveys", handlers.CreateSurvey).Methods("POST")
 	r.HandleFunc("/survey-questions/{survey_id}", handlers.GetSurveyByID).Methods("GET")
-	r.HandleFunc("/surveys/{survey_id}/responses", handlers.SubmitResponse).Methods("POST")
+	r.HandleFunc("/survey/{survey_id}", handlers.SubmitResponse).Methods("POST")
 	r.HandleFunc("/responses/{response_id}", handlers.EditResponse).Methods("PUT")
 	r.HandleFunc("/surveys/{survey_id}/responses", handlers.GetResponse).Methods("GET")
 	r.HandleFunc("/users", handlers.CreateUser).Methods("POST")

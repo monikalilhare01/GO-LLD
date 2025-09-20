@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"survey-backend/models"
+
+	"github.com/monikalilhare01/survey-backend/models"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"

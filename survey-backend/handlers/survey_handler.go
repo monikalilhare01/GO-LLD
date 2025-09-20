@@ -3,8 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"survey-backend/config"
-	"survey-backend/models"
+	"time"
+
+	"github.com/monikalilhare01/survey-backend/config"
+	"github.com/monikalilhare01/survey-backend/models"
 )
 
 type CreateSurveyResponse struct {
@@ -29,7 +31,7 @@ func CreateSurvey(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to create survey", http.StatusInternalServerError)
 		return
 	}
-
+	survey.CreatedAt = time.Now()
 	// Then insert the questions
 	for _, q := range survey.Questions {
 		q.SurveyID = survey.ID
@@ -37,13 +39,9 @@ func CreateSurvey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(CreateSurveyResponse{
-		SurveyID: survey.ID,
+		SurveyID: int(survey.ID),
 		Message:  "Survey created successfully",
 	})
-}
-
-func GeSurvey(w http.ResponseWriter, r *http.Request) {
-
 }
 
 func GetSurveyByID(w http.ResponseWriter, r *http.Request) {

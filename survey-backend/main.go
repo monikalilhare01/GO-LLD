@@ -5,13 +5,17 @@ import (
 	"log"
 	"net/http"
 
-	"survey-backend/config"
-	"survey-backend/routes"
+	"github.com/monikalilhare01/survey-backend/config"
+	"github.com/monikalilhare01/survey-backend/routes"
+
+	"github.com/joho/godotenv"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
+	godotenv.Load()
+
 	_, err := config.Connect()
 	if err != nil {
 		fmt.Println("Unable to connect to db ")

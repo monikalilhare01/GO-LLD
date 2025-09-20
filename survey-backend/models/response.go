@@ -4,7 +4,7 @@ import "time"
 
 type Response struct {
 	ID             int              `json:"id" gorm:"primaryKey;autoIncrement"`
-	SurveyID       int              `json:"surver_id"`
+	SurveyID       int              `json:"survey_id"`
 	QuestionID     int              `json:"question_id"`
 	UserID         int              `json:"user_id"`
 	ResponseAnswer []ResponseAnswer `json:"response_answer"`

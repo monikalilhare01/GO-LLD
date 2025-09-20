@@ -3,9 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"survey-backend/config"
-	"survey-backend/models"
 	"time"
+
+	"github.com/monikalilhare01/survey-backend/config"
+	"github.com/monikalilhare01/survey-backend/models"
 
 	"github.com/gorilla/mux"
 )
@@ -14,6 +15,11 @@ func SubmitResponse(w http.ResponseWriter, r *http.Request) {
 	var response models.Response
 	if err := json.NewDecoder(r.Body).Decode(&response); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	var exitingResponse models.Response
+	if err := config.DB.Where("survey_id = ? and question_id=?", response.SurveyID, response.QuestionID).First(&exitingResponse).Error; err == nil {
+		http.Error(w, "User with this email already exists", http.StatusConflict)
 		return
 	}
 	response.SubmittedAt = time.Now()
