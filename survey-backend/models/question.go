@@ -1,9 +1,9 @@
 package models
 
 type Questions struct {
-	ID           int    `json:"id"`
+	ID           int    `json:"id" gorm:"primaryKey;autoIncrement"`
 	SurveyID     int    `json:"survey_id"`
-	Questions    string `json:"question"`
+	Question     string `json:"question"`
 	QuestionType string `json:"question_type"`
 	IsRequired   bool   `json:"is_required"`
 	Options      string `json:"options"`

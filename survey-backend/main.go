@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -11,15 +12,20 @@ import (
 )
 
 func main() {
-	config.InitDB()
+	_, err := config.Connect()
+	if err != nil {
+		fmt.Println("Unable to connect to db ")
+		return
+	}
 	r := mux.NewRouter()
-	routes.RegisterSurveyRoutes(r)
 
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Server is up and running"))
 	})
-
 	log.Println("Server started at :8080")
-	http.ListenAndServe(":8080", r)
+	routes.RegisterSurveyRoutes(r)
+	if err := http.ListenAndServe(":8080", r); err != nil {
+		log.Fatal(err)
+	}
 }

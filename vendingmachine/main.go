@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	x := '1'
+	fmt.Println(string(x))
 	vm := models.NewVendingMachine()
 
 	chips := models.NewProduct("Chips", 0.5)
