@@ -43,3 +43,9 @@ func (e *Elevator) getCurrentFloor() int {
 	return e.currentFloor
 
 }
+
+func (e *Elevator) setCurrentFloor(floor int) {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+	e.currentFloor = floor
+}
